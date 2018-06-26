@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 
 const Heading = () => (
-  <div>
-    <header>
-      <h1>
-        Bookmarks:
-      </h1>
-    </header>
-    <Button type="button" text="Add Bookmark" />
+  <div className="heading">
+    <div>
+      <header>
+        <h1>
+          Bookmarks:
+        </h1>
+      </header>
+    </div>
+    <div className="btn-add-container">
+      <Button type="button" text="Add Bookmark" className="btn btn-add" />
+    </div>
   </div>
 );
 
@@ -17,11 +21,17 @@ const Button = ({ type, className, handleClick, text }) => (
   </button>
 );
 
-const Bookmarks = ({ bookmarksArr }) => (
-  <ul>
+const BookmarksList = ({ bookmarksArr }) => (
+  <ul className="bookmark-list">
     {bookmarksArr.map(bookmark => (
-      <li key={bookmark}>
-        {bookmark}
+      <li key={bookmark} className="bookmark">
+        <a href={bookmark} target="_blank" className="bookmark-anchor">
+          {bookmark.split('').slice(bookmark.indexOf('/') + 2).join('')}
+        </a>
+        <div className="bookmark-btns">
+          <Button type="button" text="Edit" className="btn btn-edit btns-edit-delete" />
+          <Button type="button" text="Delete" className="btn btn-delete btns-edit-delete" />
+        </div>
       </li>
     ))}
   </ul>
@@ -49,9 +59,9 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main-container">
         <Heading />
-        <Bookmarks bookmarksArr={this.state.bookmarks} />
+        <BookmarksList bookmarksArr={this.state.bookmarks} />
       </div>);
   }
 }

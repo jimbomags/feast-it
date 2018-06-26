@@ -1,7 +1,63 @@
+$red-btn: rgb(200, 0, 0);
+$grey-btn: rgb(150, 150, 150);
+
 html, body {
   margin: 0px;
   padding: 0px;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 16px;
   letter-spacing: 0.5px;
+}
+.main-container {
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  margin: 10vh auto;
+}
+.btn {
+  border-radius: 10px;
+  font-size: 12px;
+  margin: auto 0;
+  color: white;
+    &:hover {
+      cursor: pointer;
+    }
+}
+.btn-add-container {
+  display: flex;
+}
+.btn-add {
+  background-color: green;
+  width: 100px;
+  height: 50px;
+}
+.btn-delete {
+  background-color: $red-btn;
+}
+.btn-edit {
+  background-color: $grey-btn;
+}
+.btns-edit-delete {
+  width: 70px;
+  height: 35px;
+  margin: 5px 0 5px 10px;
+}
+.bookmark-list {
+  list-style: none;
+  padding: 0;
+}
+.bookmark {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+.bookmark-anchor {
+  margin: auto 0;
+}
+.bookmark-btns {
+  display: flex;
 }

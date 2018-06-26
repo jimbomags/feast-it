@@ -62,6 +62,9 @@ html, body {
 }
 .bookmark-anchor {
   margin: auto 0;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
 }
 .bookmark-btns {
   display: flex;
@@ -73,7 +76,6 @@ html, body {
   z-index: 0;
   position: absolute;
   top: 0;
-  display: flex;
   justify-content: center;
 }
 .form {

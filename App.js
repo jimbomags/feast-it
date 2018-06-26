@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const Heading = () => (
+const Heading = ({ handleClick }) => (
   <div className="heading">
     <div>
       <header>
@@ -10,7 +10,7 @@ const Heading = () => (
       </header>
     </div>
     <div className="btn-add-container">
-      <Button type="button" text="Add Bookmark" className="btn btn-primary btn-add" />
+      <Button type="button" text="Add Bookmark" className="btn btn-primary btn-add" handleClick={handleClick} />
     </div>
   </div>
 );
@@ -37,7 +37,7 @@ const BookmarksList = ({ bookmarksArr }) => (
   </ul>
 );
 
-const AddBookmark = ({ value, handleChange, handleSubmit, display }) => (
+const AddBookmark = ({ value, handleChange, handleSubmit, display, handleClick }) => (
   <div className="add-bookmark-form-container" style={{ display }}>
     <form onSubmit={handleSubmit} style={{ display }} className="form">
       <label>
@@ -45,7 +45,7 @@ const AddBookmark = ({ value, handleChange, handleSubmit, display }) => (
       </label>
       <input type="text" value={value} onChange={handleChange} />
       <div className="form-btns">
-        <Button type="button" text="Cancel" className="btn btn-secondary btn-red" />
+        <Button type="button" text="Cancel" className="btn btn-secondary btn-red" handleClick={handleClick} />
         <Button type="submit" text="Add" className="btn btn-secondary btn-add" />
       </div>
     </form>
@@ -61,16 +61,22 @@ class App extends Component {
       formValue: '',
       AddBookmarkDisplay: 'none',
     };
+    this.toggleDisplayAddBookmarkForm = this.toggleDisplayAddBookmarkForm.bind(this);
+  }
+
+  toggleDisplayAddBookmarkForm() {
+    this.setState(this.state.AddBookmarkDisplay === 'none' ? { AddBookmarkDisplay: 'flex' } : { AddBookmarkDisplay: 'none' })
   }
 
   render() {
+    const { AddBookmarkDisplay, bookmarks } = this.state;
     return (
       <div>
-      <AddBookmark display={this.state.AddBookmarkDisplay}/>
-      <div className="main-container">
-        <Heading />
-        <BookmarksList bookmarksArr={this.state.bookmarks} />
-      </div>
+        <AddBookmark display={AddBookmarkDisplay} handleClick={this.toggleDisplayAddBookmarkForm} />
+        <div className="main-container">
+          <Heading handleClick={this.toggleDisplayAddBookmarkForm} />
+          <BookmarksList bookmarksArr={bookmarks} />
+        </div>
       </div>
     );
   }

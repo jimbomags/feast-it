@@ -10,7 +10,7 @@ const Heading = () => (
       </header>
     </div>
     <div className="btn-add-container">
-      <Button type="button" text="Add Bookmark" className="btn btn-add" />
+      <Button type="button" text="Add Bookmark" className="btn btn-primary btn-add" />
     </div>
   </div>
 );
@@ -29,8 +29,8 @@ const BookmarksList = ({ bookmarksArr }) => (
           {bookmark.split('').slice(bookmark.indexOf('/') + 2).join('')}
         </a>
         <div className="bookmark-btns">
-          <Button type="button" text="Edit" className="btn btn-edit btns-edit-delete" />
-          <Button type="button" text="Delete" className="btn btn-delete btns-edit-delete" />
+          <Button type="button" text="Edit" className="btn btn-secondary btn-edit btns-edit-delete" />
+          <Button type="button" text="Delete" className="btn btn-secondary btn-red btns-edit-delete" />
         </div>
       </li>
     ))}
@@ -38,12 +38,18 @@ const BookmarksList = ({ bookmarksArr }) => (
 );
 
 const AddBookmark = ({ value, handleChange, handleSubmit, display }) => (
-  <form onSubmit={handleSubmit} style={{ display }}>
-    <label>
-      Enter Website Address
-    </label>
-    <input type="text" value={value} onChange={handleChange} />
-  </form>
+  <div className="add-bookmark-form-container" style={{ display }}>
+    <form onSubmit={handleSubmit} style={{ display }} className="form">
+      <label>
+        Enter Website Address:
+      </label>
+      <input type="text" value={value} onChange={handleChange} />
+      <div className="form-btns">
+        <Button type="button" text="Cancel" className="btn btn-secondary btn-red" />
+        <Button type="submit" text="Add" className="btn btn-secondary btn-add" />
+      </div>
+    </form>
+  </div>
 );
 
 class App extends Component {
@@ -59,10 +65,14 @@ class App extends Component {
 
   render() {
     return (
+      <div>
+      <AddBookmark display={this.state.AddBookmarkDisplay}/>
       <div className="main-container">
         <Heading />
         <BookmarksList bookmarksArr={this.state.bookmarks} />
-      </div>);
+      </div>
+      </div>
+    );
   }
 }
 

@@ -23,6 +23,7 @@ html, body {
   font-size: 12px;
   margin: auto 0;
   color: white;
+  border: none;
     &:hover {
       cursor: pointer;
     }
@@ -30,20 +31,24 @@ html, body {
 .btn-add-container {
   display: flex;
 }
-.btn-add {
-  background-color: green;
+.btn-primary {
   width: 100px;
   height: 50px;
 }
-.btn-delete {
+.btn-secondary {
+  width: 70px;
+  height: 35px;
+}
+.btn-add {
+  background-color: green;
+}
+.btn-red{
   background-color: $red-btn;
 }
 .btn-edit {
   background-color: $grey-btn;
 }
 .btns-edit-delete {
-  width: 70px;
-  height: 35px;
   margin: 5px 0 5px 10px;
 }
 .bookmark-list {
@@ -60,4 +65,38 @@ html, body {
 }
 .bookmark-btns {
   display: flex;
+}
+.add-bookmark-form-container {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+}
+.form {
+  margin: auto;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  label {
+    margin: -20% auto 5% auto;
+    color: white;
+    font-size: 20px;
+  }
+  input {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+.form-btns {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    margin: 20px 10px;
+  }
 }

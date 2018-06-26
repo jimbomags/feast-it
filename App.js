@@ -62,17 +62,29 @@ class App extends Component {
       AddBookmarkDisplay: 'none',
     };
     this.toggleDisplayAddBookmarkForm = this.toggleDisplayAddBookmarkForm.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   toggleDisplayAddBookmarkForm() {
-    this.setState(this.state.AddBookmarkDisplay === 'none' ? { AddBookmarkDisplay: 'flex' } : { AddBookmarkDisplay: 'none' })
+    this.setState(this.state.AddBookmarkDisplay === 'none' ? { AddBookmarkDisplay: 'flex' } : { AddBookmarkDisplay: 'none', formValue: '' })
+  }
+
+  handleChange(event) {
+    this.setState({
+      formValue: event.target.value
+    });
   }
 
   render() {
-    const { AddBookmarkDisplay, bookmarks } = this.state;
+    const { AddBookmarkDisplay, bookmarks, formValue } = this.state;
     return (
       <div>
-        <AddBookmark display={AddBookmarkDisplay} handleClick={this.toggleDisplayAddBookmarkForm} />
+        <AddBookmark
+          display={AddBookmarkDisplay}
+          handleClick={this.toggleDisplayAddBookmarkForm}
+          value={formValue}
+          handleChange={this.handleChange}
+        />
         <div className="main-container">
           <Heading handleClick={this.toggleDisplayAddBookmarkForm} />
           <BookmarksList bookmarksArr={bookmarks} />

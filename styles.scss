@@ -72,7 +72,7 @@ html, body {
 .add-bookmark-form-container {
   width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 0;
   position: absolute;
   top: 0;
@@ -94,6 +94,11 @@ html, body {
     font-size: 16px;
     text-align: center;
   }
+}
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 5px;
 }
 .form-btns {
   display: flex;

@@ -1,7 +1,12 @@
+/* eslint-env browser */
+
 import React, { Component } from 'react';
 import checkUrl from 'valid_url';
+import PropTypes from 'prop-types';
 
-const Heading = ({ handleClick }) => (
+const Heading = ({
+  handleClick,
+}) => (
   <div className="heading">
     <div>
       <header>
@@ -16,18 +21,38 @@ const Heading = ({ handleClick }) => (
   </div>
 );
 
-const Button = ({ type, className, handleClick, text }) => (
+Heading.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+};
+
+const Button = ({
+  type,
+  className,
+  handleClick,
+  text,
+}) => (
   <button type={type} className={className} onClick={handleClick}>
     {text}
   </button>
 );
 
-const BookmarksList = ({ bookmarksArr, deleteBookmark, editBookmark }) => (
+Button.propTypes = {
+  type: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+};
+
+const BookmarksList = ({
+  bookmarksArr,
+  deleteBookmark,
+  editBookmark,
+}) => (
   <ul className="bookmark-list">
     {bookmarksArr.map(bookmark => (
       <li key={bookmark} className="bookmark">
-        <a href={bookmark} target="_blank" className="bookmark-anchor" name={bookmark}>
-          {bookmark.split('').slice(bookmark.indexOf('/') + 2).join('')}
+        <a href={bookmark} target="_blank" rel="noreferrer noopener" className="bookmark-anchor" name={bookmark}>
+          {bookmark.split('').slice(bookmark.indexOf('/') + 2).join('') /* Removes the 'https://' */}
         </a>
         <div className="bookmark-btns">
           <Button type="button" text="Edit" className="btn btn-secondary btn-edit btns-edit-delete" handleClick={editBookmark} />
@@ -38,13 +63,26 @@ const BookmarksList = ({ bookmarksArr, deleteBookmark, editBookmark }) => (
   </ul>
 );
 
-const AddBookmark = ({ value, handleChange, handleSubmit, display, handleClick, errorMessageDisplay }) => (
+BookmarksList.propTypes = {
+  bookmarksArr: PropTypes.arrayOf(PropTypes.string).isRequired,
+  deleteBookmark: PropTypes.func.isRequired,
+  editBookmark: PropTypes.func.isRequired,
+};
+
+const AddBookmarkForm = ({
+  value,
+  handleChange,
+  handleSubmit,
+  display,
+  handleClick,
+  errorMessageDisplay,
+}) => (
   <div className="add-bookmark-form-container" style={{ display }}>
     <form onSubmit={handleSubmit} style={{ display }} className="form">
       <label>
         Enter Website Address:
       </label>
-      <input type="text" value={value} onChange={handleChange} autoFocus="true" />
+      <input type="text" value={value} onChange={handleChange} />
       <span className="error-message" style={{ display: errorMessageDisplay }}>
         URL entered is invalid
       </span>
@@ -56,14 +94,23 @@ const AddBookmark = ({ value, handleChange, handleSubmit, display, handleClick, 
   </div>
 );
 
+AddBookmarkForm.propTypes = {
+  value: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  display: PropTypes.string.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  errorMessageDisplay: PropTypes.string.isRequired,
+};
+
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       bookmarks: ['https://feast-it.com', 'https://github.com', 'https://jamesmcgill.surge.sh'],
       formValue: '',
-      addBookmarkDisplay: 'none',
+      AddBookmarkFormDisplay: 'none',
       edit: false,
       bookmarkToBeEdited: '',
       errorMessageDisplay: 'none',
@@ -76,6 +123,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Checks if a bookmarks array already exists in localStorage
     if (window.localStorage.getItem('bookmarks')) {
       this.setState({
         bookmarks: JSON.parse(window.localStorage.getItem('bookmarks')),
@@ -83,10 +131,13 @@ class App extends Component {
     }
   }
 
+  // This toggles the state that's linked to the AddBookmarkForm Component style.display property
   toggleDisplayAddBookmarkForm() {
-    this.setState(this.state.addBookmarkDisplay === 'none' ? { addBookmarkDisplay: 'flex' } : { addBookmarkDisplay: 'none', formValue: '' });
+    const { AddBookmarkFormDisplay } = this.state;
+    this.setState(AddBookmarkFormDisplay === 'none' ? { AddBookmarkFormDisplay: 'flex' } : { AddBookmarkFormDisplay: 'none', formValue: '', errorMessageDisplay: 'none' });
   }
 
+  // Handles input values to make the form a controlled component
   handleChange(event) {
     this.setState({
       formValue: event.target.value,
@@ -96,32 +147,41 @@ class App extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const { bookmarks, formValue, edit, bookmarkToBeEdited } = this.state;
+    const {
+      bookmarks,
+      formValue,
+      edit,
+      bookmarkToBeEdited,
+    } = this.state;
 
-    if (!checkUrl(formValue)) {
+    if (!checkUrl(formValue)) { // Checks the user has entered a vaild URL
       this.setState({
         errorMessageDisplay: 'block',
-      })
-      return
+      });
+      return;
     }
 
-    if (!edit) {
+    if (!edit) { // Checks if the user has clicked on the edit button to determine whether bookmark should be ammended or added to the array
       this.setState({
         bookmarks: [...bookmarks, formValue],
         formValue: '',
-        addBookmarkDisplay: 'none',
+        AddBookmarkFormDisplay: 'none',
         errorMessageDisplay: 'none',
       });
-      window.localStorage.setItem('bookmarks', JSON.stringify([...bookmarks, formValue]))
-    } else {
+      // Stores the array in localStorage
+      window.localStorage.setItem('bookmarks', JSON.stringify([...bookmarks, formValue]));
+    } else { // Code to be executed if the user has clicked edit
+      // Gets index of the bookmark to be ammended
       const bookmarkIndex = bookmarks.indexOf(bookmarkToBeEdited);
+      // bookmarks stored before bookmark to be edited
       const arrBeg = bookmarks.slice(0, bookmarkIndex);
+      // bookmarks stored after bookmark to be edited
       const arrEnd = bookmarks.slice(bookmarkIndex + 1);
 
       this.setState({
         bookmarks: [...arrBeg, formValue, ...arrEnd],
         formValue: '',
-        addBookmarkDisplay: 'none',
+        AddBookmarkFormDisplay: 'none',
         edit: false,
         errorMessageDisplay: 'none',
       });
@@ -131,19 +191,24 @@ class App extends Component {
 
   deleteBookmark(event) {
     const { bookmarks } = this.state;
+
+    // Bookmark to be deleted
     const bookmark = event.target.parentElement.parentElement.firstChild.name;
+    // Index of bookmark to be deleted
     const bookmarkIndex = bookmarks.indexOf(bookmark);
+    // Bookmarks stored before bookmark to be deleted
     const arrBeg = bookmarks.slice(0, bookmarkIndex);
+    // Bookmarks stored after bookmark to be deleted
     const arrEnd = bookmarks.slice(bookmarkIndex + 1);
     this.setState({
       bookmarks: [...arrBeg, ...arrEnd],
     });
-    window.localStorage.setItem('bookmarks', JSON.stringify([...arrBeg, ...arrEnd]))
+    window.localStorage.setItem('bookmarks', JSON.stringify([...arrBeg, ...arrEnd]));
   }
 
   editBookmark(event) {
     this.setState({
-      addBookmarkDisplay: 'flex',
+      AddBookmarkFormDisplay: 'flex',
       formValue: event.target.parentElement.parentElement.firstChild.name,
       edit: true,
       bookmarkToBeEdited: event.target.parentElement.parentElement.firstChild.name,
@@ -151,11 +216,16 @@ class App extends Component {
   }
 
   render() {
-    const { addBookmarkDisplay, bookmarks, formValue, errorMessageDisplay } = this.state;
+    const {
+      AddBookmarkFormDisplay,
+      bookmarks,
+      formValue,
+      errorMessageDisplay,
+    } = this.state;
     return (
       <div>
-        <AddBookmark
-          display={addBookmarkDisplay}
+        <AddBookmarkForm
+          display={AddBookmarkFormDisplay}
           handleClick={this.toggleDisplayAddBookmarkForm}
           value={formValue}
           handleChange={this.handleChange}
@@ -163,7 +233,9 @@ class App extends Component {
           errorMessageDisplay={errorMessageDisplay}
         />
         <div className="main-container">
-          <Heading handleClick={this.toggleDisplayAddBookmarkForm} />
+          <Heading
+            handleClick={this.toggleDisplayAddBookmarkForm}
+          />
           <BookmarksList
             bookmarksArr={bookmarks}
             deleteBookmark={this.deleteBookmark}
